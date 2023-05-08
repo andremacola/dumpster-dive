@@ -45,7 +45,9 @@ const wikiFromHell = (models) => {
     return getMetadata(this.wikidata());
   };
 
-  doc.isTrueRedirect = isTrueRedirect;
+  doc.isTrueRedirect = function () {
+    return isTrueRedirect(this);
+  };
 };
 
 module.exports = wikiFromHell;
