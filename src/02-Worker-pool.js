@@ -2,7 +2,7 @@ const pretty = require('prettysize');
 const WorkerNodes = require('worker-nodes');
 const fs = require('fs');
 const chalk = require('chalk');
-const jsonfn = require('jsonfn').JSONfn;
+const jsonfn = require('./lib/jsonfn');
 const EventEmitter = require('events');
 const fns = require('./lib/fns');
 const right = fns.alignRight;
@@ -46,6 +46,7 @@ class WorkerPool extends EventEmitter {
   isDone() {
     this.running -= 1;
     console.log(chalk.grey('      - ' + this.running + ' workers still running -\n'));
+
     if (this.running === 0) {
       this.workerNodes.terminate().then(() => {
         this.emit('allWorkersFinished'); //send this up to parent
@@ -55,8 +56,8 @@ class WorkerPool extends EventEmitter {
 
   //pay attention to them when they finish
   listen() {
-    this.workerNodes.workersQueue.storage.forEach(worker => {
-      worker.process.child.on('message', msg => {
+    this.workerNodes.workersQueue.storage.forEach((worker) => {
+      worker.process.child.on('message', (msg) => {
         // this.emit('msg', msg);
         if (msg.type === 'workerDone') {
           this.isDone();
@@ -69,12 +70,14 @@ class WorkerPool extends EventEmitter {
     const self = this;
     const options = this.options;
     this.printHello();
+
     //convoluted loop to wire-up each worker
     for (let i = 0; i < self.workerCount; i += 1) {
       //stringify options, so it gets passed to the web worker
       const optionStr = jsonfn.stringify(options);
       self.workerNodes.call.doSection(optionStr, this.workerCount, i).then(() => {
         self.running += 1;
+
         //once all workers have been started..
         if (self.running === self.workerCount) {
           self.listen();

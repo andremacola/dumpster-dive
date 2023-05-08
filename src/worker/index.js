@@ -3,7 +3,7 @@ const sundayDriver = require('sunday-driver');
 const parsePage = require('./01-parsePage');
 const parseWiki = require('./02-parseWiki');
 const writeDb = require('./03-write-db');
-const jsonfn = require('jsonfn').JSONfn;
+const jsonfn = require('../lib/jsonfn');
 const niceNum = require('../lib/fns').niceNumber;
 
 const doSection = async (optionStr, workerCount, workerNum) => {
@@ -35,19 +35,22 @@ const doSection = async (optionStr, workerCount, workerNum) => {
     start: `${start}%`,
     end: `${end}%`,
     splitter: '</page>',
-    each: (xml, resume) => {
+    each: async (xml, resume) => {
       // pull-out sections from this xml
       let page = parsePage(xml, this);
+
       if (page !== null) {
         if (options.verbose === true) {
           console.log('   #' + workerNum + '  - ' + page.title);
         }
         //parse the page into json
-        page = parseWiki(page, options, this);
+        page = await parseWiki(page, options, this);
+
         if (page !== null) {
           pages.push(page);
         }
       }
+
       if (pages.length >= options.batch_size) {
         writeDb(options, pages, workerNum).then(() => {
           this.counts.pages += pages.length;
@@ -69,12 +72,14 @@ const doSection = async (optionStr, workerCount, workerNum) => {
   p.then(async () => {
     //on done
     clearInterval(this.logger);
+
     // insert the remaining pages
     if (pages.length > 0) {
       await writeDb(options, pages, workerNum);
     }
     console.log('\n');
     console.log(`    💪  worker #${workerNum} has finished 💪 `);
+
     process.send = process.send || function () {};
     process.send({
       type: 'workerDone',

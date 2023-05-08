@@ -1,8 +1,6 @@
 const wtf = require('wtf_wikipedia');
 const chalk = require('chalk');
 const encode = require('./_encode');
-const wikiFromHell = require('../extensions/wtf-hell/wtf-hell');
-wtf.extend(wikiFromHell);
 
 //doesn't support fancy things like &copy; to ©, etc
 const escapeXML = function (str) {
@@ -15,8 +13,14 @@ const escapeXML = function (str) {
 };
 
 //get parsed json from the wiki markup
-const parseWiki = function (page, options, worker) {
+const parseWiki = async function (page, options, worker) {
   try {
+    // console.log('options.extension', typeof options.extension);
+
+    if (options.extension) {
+      wtf.extend(options.extension);
+    }
+
     page.wiki = escapeXML(page.wiki || '');
     // options.title = options.title || page.title
     const doc = wtf(page.wiki, options);
