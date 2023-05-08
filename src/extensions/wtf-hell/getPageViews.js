@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------- */
 
 const fetch = require('node-fetch');
-const { headers, makeUrl } = require('./wtf-hell/_fns.js');
+const { headers, makeUrl } = require('./_fns.js');
 
 const getPageViews = async function (title) {
   const params = {

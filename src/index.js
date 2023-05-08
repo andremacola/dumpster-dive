@@ -8,6 +8,7 @@ const openDB = require('./lib/open-db');
 const fns = require('./lib/fns');
 const oneSec = fns.oneSec;
 const start = Date.now();
+
 const noop = function () {};
 
 const finish = async function (options) {
