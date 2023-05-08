@@ -54,7 +54,7 @@ const parseWiki = async function (page, options, worker) {
       data = doc.json(options);
     } else {
       //DIY format
-      data = options.custom(doc);
+      data = options.custom(doc, options, wtf);
     }
 
     // add plaintext output

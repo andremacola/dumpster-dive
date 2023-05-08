@@ -9,8 +9,8 @@
 | @see: https://pt.wikipedia.org/w/index.php?title=Newsgroup&redirect=no
 ------------------------------------------------------------------------- */
 
-const isTrueRedirect = function () {
-  const hellText = this.isRedirect() || this.sections()[0].wikitext().trim();
+const isTrueRedirect = function (doc) {
+  const hellText = doc.isRedirect() || doc.sections()[0].wikitext().trim();
   const hellRedirect = [
     '#REDIRECIONAMENTO:',
     '#REDIRECIONAMENTO',
@@ -25,11 +25,11 @@ const isTrueRedirect = function () {
     '#redirect:',
     '#redirect'
   ];
-  const isRedirect = this.isRedirect() || hellRedirect.find((hell) => hellText.startsWith(hell));
+  const isRedirect = doc.isRedirect() || hellRedirect.find((hell) => hellText.startsWith(hell));
 
   const trueRedirectTerm = () => {
     const toSplit = isRedirect;
-    const target = this.sections()[0].wikitext().trim().split(toSplit).pop().trim().split('\n')[0];
+    const target = doc.sections()[0].wikitext().trim().split(toSplit).pop().trim().split('\n')[0];
 
     // retornar somente o que está dentro dos [[ ]]
     return target.match(/\[\[(.*?)\]\]/)[1];
@@ -39,7 +39,7 @@ const isTrueRedirect = function () {
     return '';
   } else {
     try {
-      return this.redirectTo() ? this.redirectTo().page : trueRedirectTerm();
+      return doc.redirectTo() ? doc.redirectTo().page : trueRedirectTerm();
     } catch (err) {
       throw new Error('204');
     }
