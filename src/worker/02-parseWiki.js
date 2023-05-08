@@ -1,6 +1,8 @@
 const wtf = require('wtf_wikipedia');
 const chalk = require('chalk');
 const encode = require('./_encode');
+const wikiFromHell = require('../extensions/wtf-hell/wtf-hell');
+wtf.extend(wikiFromHell);
 
 //doesn't support fancy things like &copy; to ©, etc
 const escapeXML = function (str) {
@@ -18,9 +20,11 @@ const parseWiki = function (page, options, worker) {
     page.wiki = escapeXML(page.wiki || '');
     // options.title = options.title || page.title
     const doc = wtf(page.wiki, options);
+
     //dont insert this if it's a redirect
     if (options.skip_redirects === true && doc.isRedirect()) {
       worker.counts.redirects += 1;
+
       if (options.verbose_skip === true) {
         console.log(
           chalk.green('skipping redirect:   -   ') + chalk.yellow('"' + page.title + '"')
@@ -28,8 +32,10 @@ const parseWiki = function (page, options, worker) {
       }
       return null;
     }
+
     if (options.skip_disambig === true && doc.isDisambiguation()) {
       worker.counts.disambig += 1;
+
       if (options.verbose_skip === true) {
         console.log(
           chalk.green('skipping disambiguation: ') + chalk.yellow('"' + page.title + '"')
@@ -41,6 +47,7 @@ const parseWiki = function (page, options, worker) {
     doc.title(page.title);
     //turn the wtf_wikipedia document into storable json
     let data = {};
+
     if (!options.custom) {
       //default format
       data = doc.json(options);
@@ -48,6 +55,7 @@ const parseWiki = function (page, options, worker) {
       //DIY format
       data = options.custom(doc);
     }
+
     // add plaintext output
     if (options.plaintext === true) {
       data.plaintext = doc.text();
@@ -57,6 +65,7 @@ const parseWiki = function (page, options, worker) {
     data.pageID = data.pageID || page.pageID;
     data._id = data._id || data.title;
     data._id = encode.encodeStr(data._id);
+
     //create a fallback id, if none is found
     if (!data._id || data._id === true) {
       delete data._id;

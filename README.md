@@ -1,3 +1,7 @@
+### Extended version with the updated wtf_wikipedia and wtf extensions incorporated.
+
+---
+
 <div align="center">
 	<h3>dumpster-dive</h3>
 	<a href="https://npmjs.org/package/dumpster-dive">

@@ -30,12 +30,13 @@
   "dependencies": {
     "chalk": "4.1.2",
     "jsonfn": "0.31.0",
-    "mongodb": "3.6.4",
+    "mongodb": "5.1.0",
     "prettysize": "2.0.0",
     "sunday-driver": "1.0.2",
     "worker-nodes": "1.6.1",
-    "wtf_wikipedia": "10.0.0",
-    "yargs": "17.4.1"
+    "wtf_wikipedia": "10.1.2",
+    "yargs": "17.4.1",
+    "node-fetch": "2.6.9"
   },
   "devDependencies": {
     "shelljs": "0.8.5",
