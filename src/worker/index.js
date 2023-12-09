@@ -3,7 +3,9 @@ const sundayDriver = require('sunday-driver');
 const parsePage = require('./01-parsePage');
 const parseWiki = require('./02-parseWiki');
 const writeDb = require('./03-write-db');
-const jsonfn = require('jsonfn').JSONfn;
+// const jsonfn = require('jsonfn').JSONfn;
+const jsonfn = require('../lib/jsonfn');
+
 const niceNum = require('../lib/fns').niceNumber;
 
 const doSection = async (optionStr, workerCount, workerNum) => {
