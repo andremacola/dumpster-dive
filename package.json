@@ -34,7 +34,7 @@
     "prettysize": "2.0.0",
     "sunday-driver": "1.0.2",
     "worker-nodes": "1.6.1",
-    "wtf_wikipedia": "^10.1.5",
+    "wtf_wikipedia": "^10.2.1",
     "wtf-hell-plugin": "github:SimpleAds/wtf-hell-plugin#main",
     "yargs": "17.7.2"
   },
